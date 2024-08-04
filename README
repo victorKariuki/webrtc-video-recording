@@ -1,11 +1,95 @@
 # WebRTC Video Recording
 
-This project demonstrates how to record videos using WebRTC, with support for pausing, resuming, and resetting recordings. It also handles video uploads using background sync for unreliable internet connections.
+This project demonstrates how to record videos using WebRTC. It supports starting, stopping, pausing, resuming, and resetting recordings. The project also includes functionality for uploading videos, with support for background sync to handle unreliable internet connections, and saving video URLs to IndexedDB.
 
 ## Features
 
 - Record video from the webcam
-- Start, stop, pause, resume, and reset recording
+- Start, stop, pause, resume, and reset recordings
 - Upload videos using background sync if the internet is unreliable
 - Save video URLs to IndexedDB
 
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Running the Application](#running-the-application)
+- [Generating Documentation](#generating-documentation)
+- [Viewing Documentation](#viewing-documentation)
+- [License](#license)
+- [Contributing](#contributing)
+
+## Prerequisites
+
+- Node.js (v14 or later) and npm installed. You can download it from [nodejs.org](https://nodejs.org/).
+
+## Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/webrtc-video-recording.git
+   cd webrtc-video-recording
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+## Setup
+
+1. **Create necessary directories:**
+
+   Ensure the following directories exist:
+   - `public/`: For serving frontend files.
+   - `uploads/`: For storing uploaded videos.
+   - `docs/`: For JSDoc documentation (this will be created automatically when you generate documentation).
+
+   Create these directories manually or run:
+   ```bash
+   mkdir uploads
+   ```
+
+## Running the Application
+
+1. **Start the server:**
+   ```bash
+   npm run serve
+   ```
+
+   The server will run on port `3000` by default. You can access it at `http://localhost:3000`.
+
+2. **Test the application:**
+
+   - Open `http://localhost:3000` in your browser.
+   - Use the provided UI to start, stop, pause, resume, and reset video recordings.
+   - Check that videos are uploaded successfully and handled correctly.
+
+## Generating Documentation
+
+1. **Generate documentation:**
+   ```bash
+   npm run docs
+   ```
+
+   This command generates documentation for all JavaScript files and places it in the `docs/` directory.
+
+## Viewing Documentation
+
+1. **Access documentation:**
+
+   After generating the documentation, view it by navigating to:
+   ```
+   http://localhost:3000/docs
+   ```
+
+   This will serve the JSDoc-generated documentation at the `/docs` route.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Feel free to open issues or submit pull requests. Contributions are welcome!

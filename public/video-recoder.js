@@ -1,33 +1,101 @@
-// Interface
+/**
+ * @interface
+ * @description Abstract class defining the basic operations for media handling.
+ */
 class MediaHandler {
-    async start() { }
-    async stop() { }
-    async pause() { }
-    async resume() { }
-    async reset() { }
+    /**
+     * Starts the media recording.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the media recording starts.
+     */
+    async start() {}
+
+    /**
+     * Stops the media recording.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the media recording stops.
+     */
+    async stop() {}
+
+    /**
+     * Pauses the media recording.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the media recording is paused.
+     */
+    async pause() {}
+
+    /**
+     * Resumes the media recording.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the media recording resumes.
+     */
+    async resume() {}
+
+    /**
+     * Resets the media recording.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the media recording is reset.
+     */
+    async reset() {}
 }
 
-
-// video-recorder.js
+/**
+ * @class
+ * @extends MediaHandler
+ * @description A class for recording video using MediaRecorder API and handling synchronization with IndexedDB and server.
+ */
 class VideoRecorder extends MediaHandler {
+    /**
+     * Creates an instance of VideoRecorder.
+     * @param {HTMLVideoElement} videoElement - The video element to display the video stream.
+     * @param {HTMLElement} timerDisplay - The element to display the recording timer.
+     * @param {DatabaseHandler} dbHandler - An instance of DatabaseHandler for storing and retrieving video data.
+     */
     constructor(videoElement, timerDisplay, dbHandler) {
         super();
+        /** @type {HTMLVideoElement} The video element to display the video stream. */
         this.video = videoElement;
+        /** @type {HTMLElement} The element to display the recording timer. */
         this.timerDisplay = timerDisplay;
+        /** @type {DatabaseHandler} An instance of DatabaseHandler for storing and retrieving video data. */
         this.dbHandler = dbHandler;
+        /** @type {?MediaRecorder} The MediaRecorder instance for recording video. */
         this.mediaRecorder = null;
+        /** @type {Array<Blob>} Array to store recorded video chunks. */
         this.recordedChunks = [];
+        /** @type {number} Seconds elapsed during recording. */
         this.seconds = 0;
+        /** @type {?number} Timer interval ID for updating the recording timer. */
         this.timer = null;
+        /** @type {boolean} Flag indicating if recording is paused. */
         this.isPaused = false;
+        /** @type {boolean} Flag indicating if recording is reset. */
         this.isReset = false;
         this.init();
     }
 
+    /**
+     * Initializes the video recording by starting the video stream.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the video is initialized.
+     */
     async init() {
         await this.startVideo();
     }
 
+    /**
+     * Starts the video stream and initializes the MediaRecorder.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the video stream and MediaRecorder are set up.
+     * @throws {Error} Throws an error if accessing the camera fails.
+     */
     async startVideo() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -62,16 +130,13 @@ class VideoRecorder extends MediaHandler {
                             console.log("Sync registered and video saved");
                         } else {
                             console.warn("SyncManager is not supported in this browser.");
-                            // Fallback to traditional upload if SyncManager is not supported
                             await fetch("/upload", { method: "POST", body: formData });
                         }
                     } catch (error) {
                         console.log("Sync registration or saving failed:", error);
-                        // Fallback to traditional upload if Sync registration fails
                         await fetch("/upload", { method: "POST", body: formData });
                     }
                 } else {
-                    // Fallback to traditional upload if SyncManager is not available
                     await fetch("/upload", { method: "POST", body: formData });
                 }
 
@@ -82,7 +147,10 @@ class VideoRecorder extends MediaHandler {
         }
     }
 
-
+    /**
+     * Updates the recording timer display.
+     * Increments the timer every second if recording is not paused.
+     */
     updateTimer() {
         if (!this.isPaused) {
             this.seconds++;
@@ -92,6 +160,12 @@ class VideoRecorder extends MediaHandler {
         }
     }
 
+    /**
+     * Starts the recording process and initializes the timer.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the recording starts.
+     */
     async start() {
         this.mediaRecorder.start();
         this.isPaused = false;
@@ -101,6 +175,12 @@ class VideoRecorder extends MediaHandler {
         console.log("Recording started");
     }
 
+    /**
+     * Stops the recording process and clears the timer.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the recording stops.
+     */
     async stop() {
         if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
             this.mediaRecorder.stop();
@@ -112,6 +192,12 @@ class VideoRecorder extends MediaHandler {
         console.log("Recording stopped");
     }
 
+    /**
+     * Pauses the recording process.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the recording is paused.
+     */
     async pause() {
         if (this.mediaRecorder.state === "recording") {
             this.mediaRecorder.pause();
@@ -120,6 +206,12 @@ class VideoRecorder extends MediaHandler {
         }
     }
 
+    /**
+     * Resumes the recording process.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the recording resumes.
+     */
     async resume() {
         if (this.mediaRecorder.state === "paused") {
             this.mediaRecorder.resume();
@@ -128,6 +220,12 @@ class VideoRecorder extends MediaHandler {
         }
     }
 
+    /**
+     * Resets the recording process, clearing recorded chunks and resetting timer.
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the recording is reset.
+     */
     async reset() {
         this.isReset = true;
         if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
