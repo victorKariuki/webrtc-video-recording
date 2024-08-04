@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebRTC Video Recording with Background Sync</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(function (registration) {
+            console.log(
+              "Service Worker registered with scope:",
+              registration.scope
+            );
+          })
+          .catch(function (error) {
+            console.log("Service Worker registration failed:", error);
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Record Video</h1>
+    <video id="video" autoplay></video>
+    <div id="controls">
+      <button id="startRecord">Start Recording</button>
+      <button id="stopRecord">Stop Recording</button>
+      <button id="pauseRecord">Pause Recording</button>
+      <button id="resumeRecord">Resume Recording</button>
+      <button id="resetRecord">Reset</button>
+    </div>
+    <div id="timer">00:00</div>
+    <script src="database-handler.js"></script>
+    <script src="video-recoder.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+# WebRTC Video Recording
+
+This project demonstrates how to record videos using WebRTC, with support for pausing, resuming, and resetting recordings. It also handles video uploads using background sync for unreliable internet connections.
+
+## Features
+
+- Record video from the webcam
+- Start, stop, pause, resume, and reset recording
+- Upload videos using background sync if the internet is unreliable
+- Save video URLs to IndexedDB
+
